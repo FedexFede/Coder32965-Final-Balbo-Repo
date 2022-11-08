@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // get player input
     // use it to move sphere
@@ -21,6 +21,8 @@ public class CarController : MonoBehaviour
     public float reverseSpeed;
     public float turnSpeed;
     public LayerMask groundLayer;
+    
+    public float jumpPower;
 
     public float airDrag;
     public float groundDrag;
@@ -28,6 +30,7 @@ public class CarController : MonoBehaviour
     public GameObject cam1;
     public GameObject cam2;
 
+    //reference to sphere rigid body
     public Rigidbody sphereRB;
 
     void Start()
@@ -43,11 +46,13 @@ public class CarController : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("In update");
         moveInput = Input.GetAxisRaw("Vertical");
         turnInput = Input.GetAxisRaw("Horizontal");
 
-        // forma extra corta de If, If moveInputa > 0, moveInput *= moveInput * fwdSpeed, sino moveInput *= moveInput * reverseSpeed
+        // forma extra corta de If, If moveInput > 0, moveInput *= moveInput * fwdSpeed, sino moveInput *= moveInput * reverseSpeed
         moveInput *= moveInput > 0 ? fwdSpeed : reverseSpeed;
+        Debug.Log(moveInput);
         
 
         //set cars position to sphere
@@ -83,10 +88,12 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log("In fixedupdate");
         if (isCarGrounded)
         {
             //move car
             sphereRB.AddForce(transform.forward * moveInput, ForceMode.Acceleration);
+            
         }
         else
         {
@@ -94,6 +101,10 @@ public class CarController : MonoBehaviour
             sphereRB.AddForce(transform.up * -9.8f);
         }
 
+        if (isCarGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            sphereRB.AddForce(transform.up * 9.8f);
+        }
         
     }
 
@@ -109,6 +120,12 @@ public class CarController : MonoBehaviour
             cam2.SetActive(false);
             cam1.SetActive(true);
         }
+    }
+    
+    void ManageJump()
+    {
+
+
     }
 }
 

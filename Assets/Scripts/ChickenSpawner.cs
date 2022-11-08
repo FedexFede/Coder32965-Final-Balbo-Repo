@@ -12,7 +12,7 @@ public class ChickenSpawner : MonoBehaviour
     {
         timer += Time.deltaTime; 
 
-        if(timer>= 2f)
+        if(timer>= 8f)
         {
             timer = 0f;
             float x = Random.Range(-100f, 100f);
